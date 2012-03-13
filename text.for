@@ -5,13 +5,11 @@ C  Return the beginning position of the string
       character*(*) string
       begpos = 1
       endpos = len(string)
-   10 if ((ichar(string(begpos:begpos)).EQ.32).AND.(begpos.LT.endpos))
-     & then
+      do while
+     & ((ichar(string(begpos:begpos)).EQ.32).AND.(begpos.LT.endpos))
          begpos = begpos + 1
-         goto 10
-      else if (begpos.EQ.endpos) then
-         begpos = 0
-      end if
+      end do
+      if (begpos.EQ.endpos) begpos = 0
       return
       end
 
@@ -20,10 +18,10 @@ C  Return the ending position of the string
       implicit none
       character*(*) string
       endpos = len(string)
-   10 if ((ichar(string(endpos:endpos)).EQ.32).AND.(endpos.gt.0)) then
+      do while
+     & ((ichar(string(endpos:endpos)).EQ.32).AND.(endpos.gt.0))
          endpos = endpos - 1
-         go to 10
-      end if
+      end do
       return
       end
 
@@ -47,10 +45,12 @@ C  Argument variables
       character*(*) field, string, delmtr
       logical greedy
 C  Local variables
+      logical skip
       integer endstr, enddel, delpos
 C  External functions
       integer endpos
 C  Initialization
+      skip = greedy
       endstr = endpos(string)
       enddel = max(1,endpos(delmtr))
       delpos = index(string,delmtr(1:enddel))
@@ -63,26 +63,28 @@ C  Standard field
          field = string(1:delpos-1)
          string = string(delpos+enddel:max(delpos+enddel,endstr))
 C        Consume repeated delimiters
-         if (greedy) then
-   10       endstr = endpos(string)
+         do while (skip)
+            endstr = endpos(string)
             delpos = index(string,delmtr(1:enddel))
             if ((delpos.EQ.1).AND.(delpos.LT.endstr)) then
                string = string(delpos+enddel:max(delpos+enddel,endstr))
-               go to 10
+            else
+               skip = .FALSE.
             end if
-         end if
+         end do
 C  Empty field
       else if (delpos.EQ.1) then
          field = char(32)
          string = string(enddel+1:)
-         if (greedy) then
-   20       endstr = endpos(string)
+         do while (skip)
+            endstr = endpos(string)
             delpos = index(string,delmtr(1:enddel))
             if ((delpos.EQ.1).AND.(delpos.LT.endstr)) then
                string = string(delpos+enddel:max(delpos+enddel,endstr))
-               go to 20
+            else
+               skip = .FALSE.
             end if
-         end if
+         end do
 C  No delimiter
       else if (delpos.EQ.0) then
          field = string
