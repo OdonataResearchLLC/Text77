@@ -93,15 +93,52 @@ C  No delimiter
       return
       end
 
+C  Return true if the field contains an integer.
+      logical function is_int (field)
+      implicit none
+      character*(*) field
+      integer istat, scratch
+      read (field,'(I11)',iostat=istat) scratch
+      is_int = istat.EQ.0
+      return
+      end
+
+C  Return an integer from the field
+      integer function atoi (field)
+      implicit none
+      character*(*) field
+      read (field,'(I11)') atoi
+      return
+      end
+
+C  Return true if the field contains a real.
+      logical function isreal (field)
+      implicit none
+      character*(*) field
+      integer istat
+      real scratch
+      read (field,'(F16.0)',iostat=istat) scratch
+      isreal = istat.EQ.0
+      return
+      end
+
+C  Return a real from the field
+      real function ator (field)
+      implicit none
+      character*(*) field
+      read (field,'(F16.0)') ator
+      return
+      end
+
 C  Print the ASCII collating sequence table to standard output
       subroutine ascii ()
       implicit none
       integer i, j, code
       code(i,j) = 32 + 8*i + j
       print *
-      do 10 i = 0, 11
-         print 20, (code(i,j), char(code(i,j)), j = 0, 7)
-   10 continue
+      do i = 0, 11
+         print 10, (code(i,j), char(code(i,j)), j = 0, 7)
+      end do
       print *
-   20 format (8(1x,I3,':',A1))
+   10 format (8(1x,I3,':',A1))
       end
