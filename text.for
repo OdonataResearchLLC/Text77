@@ -62,7 +62,7 @@ C  Standard field
       else if (delpos.GT.1) then
          field = string(1:delpos-1)
          string = string(delpos+enddel:max(delpos+enddel,endstr))
-C        Consume repeated delimiters
+C     Consume repeated delimiters
          do while (skip)
             endstr = endpos(string)
             delpos = index(string,delmtr(1:enddel))
@@ -97,9 +97,10 @@ C  Return true if the field contains an integer.
       logical function is_int (field)
       implicit none
       character*(*) field
-      integer istat, scratch
-      read (field,'(I11)',iostat=istat) scratch
-      is_int = istat.EQ.0
+      integer ios, scratch
+      common /txterr/ ios
+      read (field,'(I11)',iostat=ios) scratch
+      is_int = ios.EQ.0
       return
       end
 
@@ -107,7 +108,9 @@ C  Return an integer from the field
       integer function atoi (field)
       implicit none
       character*(*) field
-      read (field,'(I11)') atoi
+      integer ios
+      common /txterr/ ios
+      read (field,'(I11)',iostat=ios) atoi
       return
       end
 
@@ -115,10 +118,11 @@ C  Return true if the field contains a real.
       logical function isreal (field)
       implicit none
       character*(*) field
-      integer istat
+      integer ios
       real scratch
-      read (field,'(F16.0)',iostat=istat) scratch
-      isreal = istat.EQ.0
+      common /txterr/ ios
+      read (field,'(F16.0)',iostat=ios) scratch
+      isreal = ios.EQ.0
       return
       end
 
@@ -126,7 +130,18 @@ C  Return a real from the field
       real function ator (field)
       implicit none
       character*(*) field
-      read (field,'(F16.0)') ator
+      integer ios
+      common /txterr/ ios
+      read (field,'(F16.0)',iostat=ios) ator
+      return
+      end
+
+C  Return the status of the last text function
+      integer function txtios ()
+      implicit none
+      integer ios
+      common /txterr/ ios
+      txtios = ios
       return
       end
 
