@@ -19,13 +19,13 @@ C  Return the ending position of the string
       character*(*) string
       endpos = len(string)
       do while
-     & ((ichar(string(endpos:endpos)).EQ.32).AND.(endpos.gt.0))
+     & ((ichar(string(endpos:endpos)).EQ.32).AND.(endpos.GT.0))
          endpos = endpos - 1
       end do
       return
       end
 
-C  Trim whitespace from the beginning of the string.
+C  Trim spaces from the beginning of the string.
       subroutine trim77 (string)
       implicit none
       character*(*) string
@@ -35,10 +35,13 @@ C  Trim whitespace from the beginning of the string.
       end
 
 C  Split the string at the first delimiter.
-C  Input : delmtr, characters delimiting a field
-C        : string, delimited string
-C  Output : string, string with first field removed
-C        : field, first delimited field in string
+C  Input
+C     string : delimited string
+C     delmtr : characters delimiting a field
+C     greedy : logical indicating greedy delimiter
+C  Output
+C      field : first delimited field in string
+C     string : string with first field removed
       subroutine split (field, string, delmtr, greedy)
       implicit none
 C  Argument variables
@@ -98,8 +101,14 @@ C  Return true if the field contains an integer.
       implicit none
       character*(*) field
       integer ios, scratch
+      character*11 buffer
       common /txterr/ ios
-      read (field,'(I11)',iostat=ios) scratch
+      if (len(field).LT.11) then
+         buffer = field
+         read (buffer,'(I11)',iostat=ios) scratch
+      else
+         read (field,'(I11)',iostat=ios) scratch
+      end if
       is_int = ios.EQ.0
       return
       end
@@ -109,8 +118,14 @@ C  Return an integer from the field
       implicit none
       character*(*) field
       integer ios
+      character*11 buffer
       common /txterr/ ios
-      read (field,'(I11)',iostat=ios) atoi
+      if (len(field).LT.11) then
+         buffer = field
+         read (buffer,'(I11)',iostat=ios) atoi
+      else
+         read (field,'(I11)',iostat=ios) atoi
+      end if
       return
       end
 
@@ -120,8 +135,14 @@ C  Return true if the field contains a real.
       character*(*) field
       integer ios
       real scratch
+      character*16 buffer
       common /txterr/ ios
-      read (field,'(F16.0)',iostat=ios) scratch
+      if (len(field).LT.16) then
+         buffer = field
+         read (buffer,'(F16.0)',iostat=ios) scratch
+      else
+         read (field,'(F16.0)',iostat=ios) scratch
+      end if
       isreal = ios.EQ.0
       return
       end
@@ -131,8 +152,48 @@ C  Return a real from the field
       implicit none
       character*(*) field
       integer ios
+      character*16 buffer
       common /txterr/ ios
-      read (field,'(F16.0)',iostat=ios) ator
+      if (len(field).LT.16) then
+         buffer = field
+         read (buffer,'(F16.0)',iostat=ios) ator
+      else
+         read (field,'(F16.0)',iostat=ios) ator
+      end if
+      return
+      end
+
+C  Return true if the field contains a double precision.
+      logical function is_dbl (field)
+      implicit none
+      character*(*) field
+      integer ios
+      double precision scratch
+      character*32 buffer
+      common /txterr/ ios
+      if (len(field).LT.32) then
+         buffer = field
+         read (buffer,'(F32.0)',iostat=ios) scratch
+      else
+         read (field,'(F32.0)',iostat=ios) scratch
+      end if
+      is_dbl = ios.EQ.0
+      return
+      end
+
+C  Return a double precision from the field
+      double precision function atod (field)
+      implicit none
+      character*(*) field
+      integer ios
+      character*32 buffer
+      common /txterr/ ios
+      if (len(field).LT.32) then
+         buffer = field
+         read (buffer,'(F32.0)',iostat=ios) atod
+      else
+         read (field,'(F32.0)',iostat=ios) atod
+      end if
       return
       end
 
