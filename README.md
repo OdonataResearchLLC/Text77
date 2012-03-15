@@ -3,7 +3,9 @@
 This file contains a set of Fortran 77 routines that are useful for parsing
 free format text. While Fortran 77 is obsolete, there is still a lot of
 legacy code floating around. These routines are useful in cases where the
-legacy code cannot be updated to a more recent version of Fortran.
+legacy code cannot be updated to a more recent version of Fortran. If you
+are on Windows, the [Open Watcom Fortran compiler][Watcom] is a good choice
+for a free compiler.
 
 ```
 integer function begpos (string)
@@ -81,3 +83,5 @@ subroutine ascii ()
 ```
 
 `ascii` prints the ASCII collating sequence table to standard output.
+
+[Watcom]: <http://www.openwatcom.org/> "Open Watcom"
