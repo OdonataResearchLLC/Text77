@@ -1,3 +1,17 @@
+C  Position the file at the end for appending.
+      integer function eof (iunit)
+      implicit none
+      integer iunit, ios
+      common /txterr/ ios
+      ios = 0
+      do while (ios.EQ.0)
+         read (iunit,'(A1)',iostat=ios)
+      end do
+      if (ios.LT.0) backspace (iunit,iostat=ios)
+      eof = ios
+      return
+      end
+
 C  Return the beginning position of the string
       integer function begpos (string)
       implicit none
