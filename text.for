@@ -119,9 +119,9 @@ C  Return true if the field contains an integer.
       common /txterr/ ios
       if (len(field).LT.11) then
          buffer = field
-         read (buffer,'(I11)',iostat=ios) scratch
+         read (buffer,'(BN,I11)',iostat=ios) scratch
       else
-         read (field,'(I11)',iostat=ios) scratch
+         read (field,'(BN,I11)',iostat=ios) scratch
       end if
       is_int = ios.EQ.0
       return
@@ -136,9 +136,9 @@ C  Return an integer from the field
       common /txterr/ ios
       if (len(field).LT.11) then
          buffer = field
-         read (buffer,'(I11)',iostat=ios) atoi
+         read (buffer,'(BN,I11)',iostat=ios) atoi
       else
-         read (field,'(I11)',iostat=ios) atoi
+         read (field,'(BN,I11)',iostat=ios) atoi
       end if
       return
       end
@@ -153,9 +153,9 @@ C  Return true if the field contains a real.
       common /txterr/ ios
       if (len(field).LT.16) then
          buffer = field
-         read (buffer,'(F16.0)',iostat=ios) scratch
+         read (buffer,'(BN,F16.0)',iostat=ios) scratch
       else
-         read (field,'(F16.0)',iostat=ios) scratch
+         read (field,'(BN,F16.0)',iostat=ios) scratch
       end if
       isreal = ios.EQ.0
       return
@@ -170,9 +170,9 @@ C  Return a real from the field
       common /txterr/ ios
       if (len(field).LT.16) then
          buffer = field
-         read (buffer,'(F16.0)',iostat=ios) ator
+         read (buffer,'(BN,F16.0)',iostat=ios) ator
       else
-         read (field,'(F16.0)',iostat=ios) ator
+         read (field,'(BN,F16.0)',iostat=ios) ator
       end if
       return
       end
@@ -187,9 +187,9 @@ C  Return true if the field contains a double precision.
       common /txterr/ ios
       if (len(field).LT.32) then
          buffer = field
-         read (buffer,'(F32.0)',iostat=ios) scratch
+         read (buffer,'(BN,F32.0)',iostat=ios) scratch
       else
-         read (field,'(F32.0)',iostat=ios) scratch
+         read (field,'(BN,F32.0)',iostat=ios) scratch
       end if
       is_dbl = ios.EQ.0
       return
@@ -204,9 +204,9 @@ C  Return a double precision from the field
       common /txterr/ ios
       if (len(field).LT.32) then
          buffer = field
-         read (buffer,'(F32.0)',iostat=ios) atod
+         read (buffer,'(BN,F32.0)',iostat=ios) atod
       else
-         read (field,'(F32.0)',iostat=ios) atod
+         read (field,'(BN,F32.0)',iostat=ios) atod
       end if
       return
       end
